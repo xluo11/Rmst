@@ -1,0 +1,9 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+
+^README.*$
+^README_cache$
+^README_files$
+^tests$
+
+^change_log.txt$
