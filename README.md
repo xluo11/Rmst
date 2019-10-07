@@ -578,6 +578,65 @@ mutate(rs, lb=est-1.96*se, ub=est+1.96*se) %>%
 
 ![](README_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
 
+#### Example 4: Use the hybrid assembly approach
+
+Assemble 2 panels of 1-3 MST using a hybrid assembly approach that sets
+constraints on routes but test information functions on modules. In
+particular, module 1M is required to have a flat TIF of 6 over the
+region from -1.28 to 1.28, module 2E, 2M, and 2H to hit the TIF target
+of 8 at -1.28, 0, and 1.28 respectively. Additionally, each route is
+required to have 4 to 6 items in each content domain and 20 items in
+total.
+
+``` r
+x <- mst(item_pool(), '1-3', n_panels=2, method='topdown', test_len=20, max_use=1)
+x <- mst_objective(x, seq(-1.28, 1.28, length.out=3), target=6, indices=1, method='bottomup')
+x <- mst_objective(x, -1.28, target=8, indices=2, method='bottomup')
+x <- mst_objective(x,     0, target=8, indices=3, method='bottomup')
+x <- mst_objective(x,  1.28, target=8, indices=4, method='bottomup')
+for(i in 1:4)
+  x <- mst_constraint(x, 'content', min=4, max=6, level=i)
+x <- mst_assemble(x, 'lpsolve', time_limit=30)
+```
+
+    ## the model is sub-optimal, optimum: 1.869 (0.988, 0.881)
+
+``` r
+# plot the route information functions
+plot(x, byroute=FALSE, label=TRUE)
+```
+
+![](README_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+
+``` r
+# plot the module information functions
+plot(x, byroute=TRUE, label=TRUE)
+```
+
+![](README_files/figure-gfm/unnamed-chunk-20-2.png)<!-- -->
+
+``` r
+# check the content distribution
+rs <- NULL
+for(p in 1:x$n_panels)
+  for(r in 1:x$n_routes){
+    x_items <- mst_get_items(x, panel_ix=p, route_ix=r)
+    x_content <- Map(function(x) if(is.null(x)) rep(0, 4) else with(x, freq(content, 1:4)$freq), x_items)
+    x_content <- colSums(Reduce(rbind, x_content))
+    names(x_content) <- paste('content', 1:4, sep='')
+    rs <- rbind(rs, c(panel=p, route=r, x_content))
+  }
+rs
+```
+
+    ##      panel route content1 content2 content3 content4
+    ## [1,]     1     1        6        6        4        4
+    ## [2,]     1     2        5        5        4        6
+    ## [3,]     1     3        6        5        4        5
+    ## [4,]     2     1        4        6        4        6
+    ## [5,]     2     2        4        6        4        6
+    ## [6,]     2     3        4        6        4        6
+
 ## Getting help
 
 If you encounter a bug, please post a code example that exposes the bug
