@@ -250,6 +250,7 @@ mst_rdp <- function(x, theta, indices, tol=.5) {
 
   items <- Map(function(x) if(nrow(x) == 0) NULL else x, x$pool)
   coef <- model_mixed_info(theta, items, D=x$ata$opts$D, combine=TRUE)
+  coef <- aggregate(t(coef), by=list(group=unlist(x$ata$groups)), sum)[,-1]
   mat <- matrix(0, nrow=x$n_panels, ncol=x$ata$n_lpvar)
   for(i in 1:x$n_panels) {
     idx <- 1:x$ata$n_items + (indices[1] - 1) * x$ata$n_items + (i - 1) * x$n_modules * x$ata$n_items
@@ -286,6 +287,7 @@ mst_module_info <- function(x, theta, min=NA, max=NA, indices) {
 
   items <- Map(function(x) if(nrow(x) == 0) NULL else x, x$pool)
   coef <- model_mixed_info(theta, items, D=x$ata$opts$D, combine=TRUE)
+  coef <- aggregate(t(coef), by=list(group=unlist(x$ata$groups)), sum)[,-1]
   mat <- matrix(0, nrow=x$n_panels*length(indices), ncol=x$ata$n_lpvar)
   for(p in 1:x$n_panels) {
     idx <- outer(1:x$ata$n_items, (indices - 1) * x$ata$n_items, "+")

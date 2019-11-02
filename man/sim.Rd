@@ -24,6 +24,10 @@ mst_sim(x, true, rdp = NULL, estimator = model_mixed_eap, ...)
 
 \item{estimator}{the estimator of the ability parameter (function)}
 }
+\value{
+a list of true and estimated ability theta, administered items,
+and end-of-stage statistics
+}
 \description{
 \code{mst_sim} simulates the administration of the assembled MST panel(s)
 }

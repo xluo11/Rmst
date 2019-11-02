@@ -9,6 +9,8 @@ NULL
 #' @param x the MST object
 #' @param indices the input form indices
 #' @param method the assembly method: topdown or bottomup
+#' @return \code{mst_get_form_index} returns a matrix of form index with rows being
+#' routes and columns the modules.
 #' @keywords internal
 mst_get_form_index <- function(x, indices, method){
   if(is.null(method))

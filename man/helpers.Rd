@@ -14,6 +14,10 @@ mst_get_form_index(x, indices, method)
 
 \item{method}{the assembly method: topdown or bottomup}
 }
+\value{
+\code{mst_get_form_index} returns a matrix of form index with rows being
+routes and columns the modules.
+}
 \description{
 helper functions for MST assembly and simulation
 

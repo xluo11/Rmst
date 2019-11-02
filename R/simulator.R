@@ -26,6 +26,8 @@ NULL
 #' @param rdp routing decision points (list)
 #' @param estimator the estimator of the ability parameter (function)
 #' @param ... additional option/control parameters
+#' @return a list of true and estimated ability theta, administered items,
+#' and end-of-stage statistics
 #' @details
 #' Use \code{theta} to set the initial theta, \code{panel} to select the MST panel,
 #' \code{prior} to set the prior for theta estimation, \code{bounds} to set the
